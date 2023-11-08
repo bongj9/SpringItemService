@@ -20,7 +20,7 @@ public class ItemRepository {
         return item;
     }
 
-    public Item findById(Long id) {
+    public static Item findById(Long id) {
         return store.get(id);
     }
 
