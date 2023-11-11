@@ -6,10 +6,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,9 +35,35 @@ public class BasicItemController {
         return "/basic/addForm";
     }
 
+   /* @PostMapping("/add") //같은 url으로 오더라도 액션이 다르다 즉 http메서드로 액션을 구분한다*/
+    public String addItemV1(@RequestParam String itemName,
+                       @RequestParam int price,
+                       @RequestParam Integer quantity,
+                        Model model ) {
+        Item item = new Item(); //위에 파라미터룰 생성하면 이코드부터 객체를 생성해서 받는 역할을 한다
+        item.setItemName(itemName);
+        item.setPrice(price);
+        item.setQuantity(quantity);
+
+        itemRepository.save(item); //객체를 받아주는 역할
+
+        model.addAttribute("item", item);
+
+        return "/basic/item";
+    }
     @PostMapping("/add") //같은 url으로 오더라도 액션이 다르다 즉 http메서드로 액션을 구분한다
-    public String save() {
-        return "/basic/addForm";
+    public String addItemV2(@ModelAttribute("item")Item item, Model model
+                        ) { //("item")을 없애도 기본규칙은 첫 클래스이름을 대문자에서 소문자로 바꿔지기 떄문에 생략가능하다
+  /*      Item item = new Item(); //위에 파라미터룰 생성하면 이코드부터 객체를 생성해서 받는 역할을 한다
+        item.setItemName(itemName);
+        item.setPrice(price);
+        item.setQuantity(quantity);*/
+//modelAttribute가 객체생성해주고 거기에 set을 호출해준다
+        itemRepository.save(item); //객체를 받아주는 역할
+/*          자동생성되기 떄문에 생략가능
+        model.addAttribute("item", item);*/
+
+        return "/basic/item";
     }
     @PostConstruct //테스트용 데이터 추가
     public void init() {
