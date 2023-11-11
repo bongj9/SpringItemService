@@ -22,7 +22,7 @@ public class BasicItemController {
     public String items(Model model){ //아이템목록조회
         List<Item> items = itemRepository.findAll();
         model.addAttribute("items", items);
-        return "basic/items"; //여기위치에 view를 만들어 넣는다
+        return "/basic/items"; //여기위치에 view를 만들어 넣는다
     }
 
     @GetMapping("/{itemId}")
@@ -32,6 +32,10 @@ public class BasicItemController {
         return "/basic/item";
     }
 
+    @GetMapping("/add")
+    public String addForm() {
+        return "/basic/addForm";
+    }
     @PostConstruct //테스트용 데이터 추가
     public void init() {
         itemRepository.save(new Item("itemA", 10000, 10));
