@@ -51,7 +51,7 @@ public class BasicItemController {
 
         return "/basic/item";
     }
-    @PostMapping("/add") //같은 url으로 오더라도 액션이 다르다 즉 http메서드로 액션을 구분한다
+    /*@PostMapping("/add") //같은 url으로 오더라도 액션이 다르다 즉 http메서드로 액션을 구분한다*/
     public String addItemV2(@ModelAttribute("item")Item item, Model model
                         ) { //("item")을 없애도 기본규칙은 첫 클래스이름을 대문자에서 소문자로 바꿔지기 떄문에 생략가능하다
   /*      Item item = new Item(); //위에 파라미터룰 생성하면 이코드부터 객체를 생성해서 받는 역할을 한다
@@ -65,8 +65,17 @@ public class BasicItemController {
 
         return "/basic/item";
     }
+
+    @PostMapping("/add")
+    public String addItemv3(Item item) {//우리가 만든 임의의 객체는 모델어트리뷰트를 생략할수있다 일반 int,string은 파라미터로 생략가능
+        itemRepository.save(item);
+        return "/basic/item";
+    }
+
     @PostConstruct //테스트용 데이터 추가
     public void init() {
+
+
         itemRepository.save(new Item("itemA", 10000, 10));
         itemRepository.save(new Item("itemB", 20000, 20));
 
