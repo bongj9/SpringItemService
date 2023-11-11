@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -34,6 +35,11 @@ public class BasicItemController {
 
     @GetMapping("/add")
     public String addForm() {
+        return "/basic/addForm";
+    }
+
+    @PostMapping("/add") //같은 url으로 오더라도 액션이 다르다 즉 http메서드로 액션을 구분한다
+    public String save() {
         return "/basic/addForm";
     }
     @PostConstruct //테스트용 데이터 추가
