@@ -17,7 +17,7 @@ public class BasicItemController {
     private final ItemRepository itemRepository;
 
     @GetMapping
-    public String items(Model model){ //아이템목록조회
+    public String items(Model model) { //아이템목록조회
         List<Item> items = itemRepository.findAll();
         model.addAttribute("items", items);
         return "/basic/items"; //여기위치에 view를 만들어 넣는다
@@ -35,11 +35,11 @@ public class BasicItemController {
         return "/basic/addForm";
     }
 
-   /* @PostMapping("/add") //같은 url으로 오더라도 액션이 다르다 즉 http메서드로 액션을 구분한다*/
+    /* @PostMapping("/add") //같은 url으로 오더라도 액션이 다르다 즉 http메서드로 액션을 구분한다*/
     public String addItemV1(@RequestParam String itemName,
-                       @RequestParam int price,
-                       @RequestParam Integer quantity,
-                        Model model ) {
+                            @RequestParam int price,
+                            @RequestParam Integer quantity,
+                            Model model) {
         Item item = new Item(); //위에 파라미터룰 생성하면 이코드부터 객체를 생성해서 받는 역할을 한다
         item.setItemName(itemName);
         item.setPrice(price);
@@ -51,9 +51,10 @@ public class BasicItemController {
 
         return "/basic/item";
     }
+
     /*@PostMapping("/add") //같은 url으로 오더라도 액션이 다르다 즉 http메서드로 액션을 구분한다*/
-    public String addItemV2(@ModelAttribute("item")Item item, Model model
-                        ) { //("item")을 없애도 기본규칙은 첫 클래스이름을 대문자에서 소문자로 바꿔지기 떄문에 생략가능하다
+    public String addItemV2(@ModelAttribute("item") Item item, Model model
+    ) { //("item")을 없애도 기본규칙은 첫 클래스이름을 대문자에서 소문자로 바꿔지기 떄문에 생략가능하다
   /*      Item item = new Item(); //위에 파라미터룰 생성하면 이코드부터 객체를 생성해서 받는 역할을 한다
         item.setItemName(itemName);
         item.setPrice(price);
@@ -70,6 +71,15 @@ public class BasicItemController {
     public String addItemv3(Item item) {//우리가 만든 임의의 객체는 모델어트리뷰트를 생략할수있다 일반 int,string은 파라미터로 생략가능
         itemRepository.save(item);
         return "/basic/item";
+    }
+
+    @GetMapping("/{item.id}/edit")
+    public String editForm(@PathVariable Long itemId, Model model) { //어떤상품을 수정할지 확인해야함
+        Item item = itemRepository.findById(itemId); //itemId를 찾아오고
+        model.addAttribute("item",item);
+        return "/basic/editForm";
+
+
     }
 
     @PostConstruct //테스트용 데이터 추가
