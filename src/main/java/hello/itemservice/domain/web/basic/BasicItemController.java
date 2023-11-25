@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -67,25 +68,38 @@ public class BasicItemController {
         return "/basic/item";
     }
 
-    @PostMapping("/add")
+  //  @PostMapping("/add")
     public String addItemv3(Item item) {//우리가 만든 임의의 객체는 모델어트리뷰트를 생략할수있다 일반 int,string은 파라미터로 생략가능
         itemRepository.save(item);
         return "/basic/item";
     }
+    //@PostMapping("/add")
+    public String addItemv5(Item item) {
+        itemRepository.save(item);
+        return "redirect:/basic/items/" + item.getId();
+    }
+    @PostMapping("/add")
+    public String addItemv6(Item item ,RedirectAttributes redirectAttributes) {
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/basic/items/{itemId}";
+    }
 
-    @GetMapping("/{item.id}/edit")
+    @GetMapping("/{itemId}/edit")
     public String editForm(@PathVariable Long itemId, Model model) { //어떤상품을 수정할지 확인해야함
         Item item = itemRepository.findById(itemId); //itemId를 찾아오고
         model.addAttribute("item",item);
-        return "/basic/editForm";
-
-
+        return "basic/editForm";
+    }
+    @PostMapping("/{itemId}/edit")
+    public String edit(@PathVariable Long itemId, @ModelAttribute Item item) { //어떤상품을 수정할지 확인해야함
+        itemRepository.update(itemId, item);
+        return "redirect:/basic/items/{itemId}";
     }
 
     @PostConstruct //테스트용 데이터 추가
     public void init() {
-
-
         itemRepository.save(new Item("itemA", 10000, 10));
         itemRepository.save(new Item("itemB", 20000, 20));
 
